@@ -1,11 +1,12 @@
 const GameStatus = Object.freeze({
-    ONGOING: 'Ongoing',
-    CHECKMATE: 'Checkmate',
-    STALEMATE: 'Stalemate',
-    DRAW: 'Draw',
-    INSUFF_MATERIAL: 'Insufficient Material',
-    THREEFOLD_REP: 'Threefold Repetition',
-    CHECK: 'Check'
+    ONGOING: 'ongoing',
+    CHECKMATE: 'checkmate',
+    STALEMATE: 'stalemate',
+    DRAW: 'draw',
+    INSUFF_MATERIAL: 'insufficient material',
+    THREEFOLD_REP: 'threefold repetition',
+    CHECK: 'check',
+    RESIGNATION: "resignation"
 });
 
 export default GameStatus;

@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import Player from "./Player.js";
+import ChessPlayer from "./ChessPlayer.js";
 
 export default class PlayerManager {
     /**
@@ -16,7 +17,7 @@ export default class PlayerManager {
      * @returns {Player}
      */
     addNewPlayer(socket) {
-        const player = new Player(this.nextPlayerId++, socket);
+        const player = new ChessPlayer(this.nextPlayerId++, socket);
         this.players.push(player);
         return player;
     }

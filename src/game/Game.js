@@ -1,3 +1,6 @@
+import GameStatus from "../enum/GameStatus.enum.js";
+import SocketEvents from "../enum/SocketEvents.enum.js";
+import ChessPlayer from "../player/ChessPlayer.js";
 import Player from "../player/Player.js";
 
 export default class Game {
@@ -26,7 +29,7 @@ export default class Game {
     addPlayer(player) {
         if (this.players.length < this.maxPlayers) {
             this.players.push(player);
-            this.updateActiveStatus();
+            player.joinGame(this);
         }
 
         if (this.players.length >= this.playerNeededToStart && !this.isActive) {
@@ -36,13 +39,27 @@ export default class Game {
 
     /**
      * Removes a player.
-     * @param {any} player - The player to remove
+     * @param {ChessPlayer} player - The player to remove
      */
     removePlayer(player) {
+        if (!this.players) return;
+
         const index = this.players.indexOf(player);
-        if (index !== -1) {
-            this.players.splice(index, 1);
-            this.updateActiveStatus();
+        if (index == -1) return;
+
+        this.players.splice(index, 1);
+
+        if (this.isActive) {
+            this.isActive = false;
+
+            const event = {
+                gameId: this.id,
+                winner: this.players[0].color,
+                reason: GameStatus.RESIGNATION
+            }
+
+            player.socket.emit(SocketEvents.GAME_FINISHED, event);
+            this.players[0].socket.emit(SocketEvents.GAME_FINISHED, event);
         }
     }
 
@@ -56,13 +73,6 @@ export default class Game {
      */
     hasEmptySlot() {
         return this.players.length < this.maxPlayers;
-    }
-
-    /**
-     * Updates the game's active status based on the number of players.
-     */
-    updateActiveStatus() {
-        this.isActive = this.players.length > 0;
     }
 
     /**

@@ -1,8 +1,9 @@
 import { Socket } from "socket.io";
-import SocketEvents from "../enum/SocketEvents.enum";
 
 export default class Player {
+
     userName = "player";
+
     isInGame = false;
 
     /**
@@ -19,10 +20,10 @@ export default class Player {
     }
 
     /**
-     * @param {string} userName 
+     * @param {string} username 
      */
-    setUserName(userName) {
-        this.userName = userName;
+    setUsername(username) {
+        this.username = username;
     }
 
     joinGame() {
@@ -35,7 +36,7 @@ export default class Player {
 
     destroy() {
         this.leaveGame();
-        this.userName = null;
+        this.username = null;
         if (this.socket) {
             this.socket.disconnect(true);
             this.socket = null;

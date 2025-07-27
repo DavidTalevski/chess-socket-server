@@ -2,12 +2,12 @@
   "name": "game-server",
   "version": "1.0.0",
   "description": "A multiplayer game server with player management and real-time communication",
-  "main": "./src/GameServer.js",
+  "main": "./src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/server/GameServer.js",
-    "dev": "nodemon src/server/GameServer.js",
-    "test": "jest",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:ci": "jest --ci --maxWorkers=2",
@@ -15,7 +15,7 @@
     "lint:fix": "eslint 'src/**/*.js' --fix",
     "build": "babel src -d dist",
     "prettier": "prettier --write 'src/**/*.{js,json,html,css}'",
-    "start:prod": "NODE_ENV=production node src/server/GameServer.js"
+    "start:prod": "NODE_ENV=production node src/index.js"
   },
   "keywords": [
     "game",

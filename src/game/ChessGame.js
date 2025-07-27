@@ -18,8 +18,15 @@ export default class ChessGame extends Game {
     startGame() {
         super.startGame();
 
+        // Randomly assign colors to the two players
+        const [player1, player2] = this.players;
+        const isPlayer1White = Math.random() < 0.5;
+
+        player1.color = isPlayer1White ? 'w' : 'b';
+        player2.color = isPlayer1White ? 'b' : 'w';
+
         this.players.forEach(player => {
-            const opponent = this.players.find(p => p !== player);
+            const opponent = this.players.find(p => p.id !== player.id);
 
             /** @type {GameStartedEvent} */
             const event = {
@@ -31,30 +38,35 @@ export default class ChessGame extends Game {
                 timestamp: Date.now()
             };
 
+            player.onGameStarted(event);
             player.socket.emit(SocketEvents.GAME_STARTED, event);
-            // player.onGameStarted();
         });
     }
+
 
     /**
      * Make a move on the chessboard
      * @param {string} move - A move in standard algebraic notation (e.g., 'e2e4', 'Nf3', etc.)
      * @param {ChessPlayer} player -
-     * @returns {string|boolean} - The result of the move (false if invalid, or a string describing the game state)
+     * @returns {boolean} - The result of the move
      */
     makeMove(player, move) {
+
+        if (this.chess.turn() !== player.color) {
+            return false;
+        }
+
         const result = this.chess.move(move);
 
         if (result === null) {
-            return 'Invalid move!';
+            return false;
         }
 
-        // If the game is over after the move, return the status
         if (this.chess.isGameOver()) {
-            this.updateGameStatus(); // Update the status if the game is over
+            this.updateGameStatus();
         }
 
-        return this.chess.fen(); // Return the board state in FEN notation (for easy transmission)
+        return true;
     }
 
     /**
@@ -63,8 +75,8 @@ export default class ChessGame extends Game {
      */
     getGameState() {
         return {
-            fen: this.chess.fen(),  // Get the current board state in FEN format
-            turn: this.chess.turn(), // Current player's turn (either 'w' or 'b')
+            fen: this.chess.fen(),
+            turn: this.chess.turn(),
             gameOver: this.chess.isGameOver(),
             gameStatus: this.status
         };
@@ -106,6 +118,6 @@ export default class ChessGame extends Game {
      */
     resetGame() {
         this.chess.reset();
-        this.status = GameStatus.ONGOING; // Reset the game status
+        this.status = GameStatus.ONGOING;
     }
 }

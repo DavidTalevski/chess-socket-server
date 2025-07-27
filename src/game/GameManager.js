@@ -1,3 +1,4 @@
+import ChessGame from "./ChessGame.js";
 import Game from "./Game.js";
 
 export default class GameManager {
@@ -9,11 +10,11 @@ export default class GameManager {
 
     /**
      * Creates a new game
-     * @returns {Game} The newly created game.
+     * @returns {ChessGame} The newly created game.
      */
     createNewGame() {
         const id = this.generateGameId();
-        const newGame = new Game(id);
+        const newGame = new ChessGame(id);
         this.games.push(newGame);
         return newGame;
     }
@@ -42,8 +43,8 @@ export default class GameManager {
      * @returns {boolean} True if a game was removed, false otherwise.
      */
     removeGame(id) {
-        const index = this.games.find(game => game.id === id);
-        if (index !== undefined) {
+        const index = this.games.findIndex(game => game.id === id);
+        if (index !== -1) {
             const game = this.games[index];
             game.destroy(); // Clean up the game before removal
             this.games.splice(index, 1);
@@ -51,6 +52,7 @@ export default class GameManager {
         }
         return false;
     }
+
 
     /**
      * Returns all currently active games.
