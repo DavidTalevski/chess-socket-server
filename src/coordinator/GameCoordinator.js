@@ -7,7 +7,6 @@ import Player from "../player/Player.js";
 export default class GameCoordinator {
 
     players = new PlayerManager();
-
     games = new GameManager();
 
     /**
@@ -24,48 +23,95 @@ export default class GameCoordinator {
     }
 
     /**
-     * @param {Player} player 
+     * Finds a game for a player to join, preventing them from joining if already in a game.
+     * @param {Player} player The player who wants to join a game.
+     * @returns {Game | null} The game the player joined, or null if they couldn't join.
      */
     playerJoinRandomGame(player) {
-        const game = this.getFreeGame()
+        // --- NEW: Defensive check for a valid player object ---
+        if (!player) {
+            console.warn('GameCoordinator: Attempted to join a game with a null player.');
+            return null;
+        }
 
+        // --- NEW: The crucial check to prevent double-joining ---
+        if (player.game) {
+            console.warn(`GameCoordinator: Player ${player.id} attempted to join a game but is already in game ${player.game.id}.`);
+            // Return the existing game so the caller knows where the player is.
+            return player.game;
+        }
+
+        const game = this.getFreeGame();
         game.addPlayer(player);
 
         return game;
     }
 
     /**
-     * @param {Player} player 
+     * Handles a player leaving their current game.
+     * @param {Player} player The player leaving the game.
      */
     playerLeaveGame(player) {
+        // --- NEW: Defensive check for a valid player object ---
+        if (!player) {
+            console.warn('GameCoordinator: Attempted to leave a game with a null player.');
+            return;
+        }
+
         const game = player.game;
+
+        if (!game) {
+            // This is not an error, the player just wasn't in a game.
+            return;
+        }
+
         const gameWasActive = game.isActive;
 
         player.leaveGame();
 
+        // If the game was full and is now ending because the player left.
         if (gameWasActive) {
             this.removeGame(game);
         }
     }
 
     /**
-     * @param {Socket} socket 
+     * Creates and adds a new player to the player manager.
+     * @param {Socket} socket The socket of the new player.
+     * @returns {Player | null} The newly created player, or null if the socket was invalid.
      */
     addNewPlayer(socket) {
+        // --- NEW: Defensive check for a valid socket ---
+        if (!socket) {
+            console.warn('GameCoordinator: Attempted to add a new player with a null socket.');
+            return null;
+        }
         return this.players.addNewPlayer(socket);
     }
 
     /**
-     * @param {Player} player 
+     * Removes a player from the central player manager.
+     * @param {Player} player The player to remove.
      */
     removePlayer(player) {
-        return this.players.removePlayer(player.id)
+        // --- NEW: Defensive check for a valid player object ---
+        if (!player || !player.id) {
+            console.warn('GameCoordinator: Attempted to remove an invalid player.');
+            return;
+        }
+        return this.players.removePlayer(player.id);
     }
 
     /**
-     * @param {Game} game 
+     * Removes a game from the central game manager.
+     * @param {Game} game The game to remove.
      */
     removeGame(game) {
+        // --- NEW: Defensive check for a valid game object ---
+        if (!game || !game.id) {
+            console.warn('GameCoordinator: Attempted to remove an invalid game.');
+            return;
+        }
         this.games.removeGame(game.id);
     }
 }

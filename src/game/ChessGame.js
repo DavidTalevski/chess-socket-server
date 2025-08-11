@@ -16,6 +16,8 @@ export default class ChessGame extends Game {
     }
 
     startGame() {
+        if (this.players.length < this.maxPlayers) return;
+
         super.startGame();
 
         // Randomly assign colors to the two players
@@ -45,14 +47,29 @@ export default class ChessGame extends Game {
 
 
     /**
-     * Make a move on the chessboard
-     * @param {string} move - A move in standard algebraic notation (e.g., 'e2e4', 'Nf3', etc.)
-     * @param {ChessPlayer} player -
-     * @returns {boolean} - The result of the move
+     * Validates and makes a move on the chessboard.
+     * @param {ChessPlayer} player - The player making the move.
+     * @param {string} move - A move in standard algebraic notation (e.g., 'e4', 'Nf3', 'Qxf7').
+     * @returns {boolean} - True if the move was valid and made, false otherwise.
      */
     makeMove(player, move) {
-
         if (this.chess.turn() !== player.color) {
+            return false;
+        }
+
+        if (typeof move !== 'string') {
+            return false;
+        }
+
+        const legalMoveObjects = this.chess.moves({ verbose: true });
+
+        const foundMove = legalMoveObjects.find(legalMove => {
+            return legalMove.san === move ||
+                legalMove.san === move + '+' ||
+                legalMove.san === move + '#';
+        });
+
+        if (!foundMove) {
             return false;
         }
 

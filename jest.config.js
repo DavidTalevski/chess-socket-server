@@ -1,13 +1,18 @@
 /** @type {import('jest').Config} */
 const config = {
-    // Tells Jest to use Node.js environment
+    // This is the most critical line. It tells Jest to set up a Node.js environment,
+    // which automatically makes globals like `jest`, `describe`, and `it` available.
     testEnvironment: 'node',
 
-    // This is crucial for ES Modules support
-    transform: {}, // No transformation needed if Node version supports ESM fully
+    // This sets the timeout for ALL tests globally. It replaces the need
+    // for jest.setTimeout() in any of your test files.
+    testTimeout: 30000,
 
-    // Increase the default timeout for tests that involve network communication
-    testTimeout: 5000,
+    // This line is often necessary for projects using native ES Modules (`import`/`export`).
+    transform: {},
+
+    // Optional but recommended: Make test output clearer.
+    verbose: true,
 };
 
 export default config;

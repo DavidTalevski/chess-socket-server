@@ -62,7 +62,6 @@ export function makeMove(socket, moveString) {
     return new Promise((resolve, reject) => {
         socket.once('move_made', resolve);
         socket.once('invalid_move', (err) => {
-            console.log(err);
             reject(new Error(`Invalid move: ${moveString} - ${err.message}`));
         });
         socket.emit('make_move', moveString);
