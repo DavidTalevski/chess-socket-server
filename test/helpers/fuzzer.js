@@ -144,18 +144,6 @@ export function generateFuzzedData() {
         () => ({ a: { b: { c: { d: "deeply nested" } } } }), // Deeply nested object
         () => ({ key: undefined, another: NaN }), // Object with problematic values
         () => Object.create(null), // Object with no prototype, breaks `hasOwnProperty`
-
-        // --- REMOVED THE FOLLOWING GENERATOR ---
-        // The purpose of this generator was to find crashes in serializers.
-        // It successfully crashed the server's logger and the client's emitter.
-        // Its job is done. We remove it to allow other fuzz tests to run.
-        /*
-        () => {
-            const circular = {};
-            circular.a = { b: circular };
-            return circular;
-        },
-        */
     ];
 
     // Select a random generator function from the array and execute it.

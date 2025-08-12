@@ -88,15 +88,20 @@ class GameServer {
     /**
      * @private
      * @param {ChessPlayer} player
-     * @param {string} move  
+     * @param {string} move
      */
     handleMakeMove(player, move) {
-        if (!player.game) return;
+        if (!player.game || player.game.status !== GameStatus.ONGOING) {
+            player.socket.emit(SocketEvents.INVALID_MOVE, { move });
+            return;
+        }
 
-        const result = player.makeMove(move);
+        const result = player.makeMove(move); // This now calls the method on ChessPlayer, which should call the game's makeMove
+
         if (result) {
             const gameState = player.game.getGameState();
 
+            // Notify all players in the game about the successful move.
             player.game.players.forEach(p => {
                 p.socket.emit(SocketEvents.MOVE_MADE, {
                     move,
@@ -106,10 +111,12 @@ class GameServer {
                 });
             });
 
+            // Check for game over *after* a successful move.
             if (player.game.chess.isGameOver()) {
                 this.handleGameOver(player.game);
             }
         } else {
+            // The move was invalid (e.g., illegal move, out of turn).
             player.socket.emit(SocketEvents.INVALID_MOVE, { move });
         }
     }

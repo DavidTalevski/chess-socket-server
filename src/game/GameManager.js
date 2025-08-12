@@ -34,7 +34,7 @@ export default class GameManager {
      * @returns {Game}
      */
     getGameWithEmptySlot() {
-        return this.games.find(game => game.hasEmptySlot());
+        return this.games.find(game => !game.started && game.hasEmptySlot());
     }
 
     /**

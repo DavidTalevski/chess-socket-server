@@ -28,16 +28,13 @@ export default class GameCoordinator {
      * @returns {Game | null} The game the player joined, or null if they couldn't join.
      */
     playerJoinRandomGame(player) {
-        // --- NEW: Defensive check for a valid player object ---
         if (!player) {
-            console.warn('GameCoordinator: Attempted to join a game with a null player.');
+            // console.warn('GameCoordinator: Attempted to join a game with a null player.');
             return null;
         }
 
-        // --- NEW: The crucial check to prevent double-joining ---
         if (player.game) {
-            console.warn(`GameCoordinator: Player ${player.id} attempted to join a game but is already in game ${player.game.id}.`);
-            // Return the existing game so the caller knows where the player is.
+            // console.warn(`GameCoordinator: Player ${player.id} attempted to join a game but is already in game ${player.game.id}.`);
             return player.game;
         }
 
@@ -52,16 +49,14 @@ export default class GameCoordinator {
      * @param {Player} player The player leaving the game.
      */
     playerLeaveGame(player) {
-        // --- NEW: Defensive check for a valid player object ---
         if (!player) {
-            console.warn('GameCoordinator: Attempted to leave a game with a null player.');
+            // console.warn('GameCoordinator: Attempted to leave a game with a null player.');
             return;
         }
 
         const game = player.game;
 
         if (!game) {
-            // This is not an error, the player just wasn't in a game.
             return;
         }
 
@@ -69,7 +64,6 @@ export default class GameCoordinator {
 
         player.leaveGame();
 
-        // If the game was full and is now ending because the player left.
         if (gameWasActive) {
             this.removeGame(game);
         }
@@ -81,9 +75,8 @@ export default class GameCoordinator {
      * @returns {Player | null} The newly created player, or null if the socket was invalid.
      */
     addNewPlayer(socket) {
-        // --- NEW: Defensive check for a valid socket ---
         if (!socket) {
-            console.warn('GameCoordinator: Attempted to add a new player with a null socket.');
+            // console.warn('GameCoordinator: Attempted to add a new player with a null socket.');
             return null;
         }
         return this.players.addNewPlayer(socket);
@@ -94,9 +87,8 @@ export default class GameCoordinator {
      * @param {Player} player The player to remove.
      */
     removePlayer(player) {
-        // --- NEW: Defensive check for a valid player object ---
         if (!player || !player.id) {
-            console.warn('GameCoordinator: Attempted to remove an invalid player.');
+            // console.warn('GameCoordinator: Attempted to remove an invalid player.');
             return;
         }
         return this.players.removePlayer(player.id);
@@ -109,7 +101,7 @@ export default class GameCoordinator {
     removeGame(game) {
         // --- NEW: Defensive check for a valid game object ---
         if (!game || !game.id) {
-            console.warn('GameCoordinator: Attempted to remove an invalid game.');
+            // console.warn('GameCoordinator: Attempted to remove an invalid game.');
             return;
         }
         this.games.removeGame(game.id);

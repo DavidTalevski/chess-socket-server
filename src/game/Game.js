@@ -15,6 +15,7 @@ export default class Game {
         this.id = id;
 
         this.isActive = false;
+        this.started = false;
 
         this.maxPlayers = 2;
 
@@ -64,6 +65,7 @@ export default class Game {
     }
 
     startGame() {
+        this.started = true;
         this.isActive = true;
     }
 
