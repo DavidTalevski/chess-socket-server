@@ -36,7 +36,9 @@ class GameServer {
      * @param {number} port
      */
     listen(port) {
-        this.server.listen(port, () => console.log(`Server running on port ${port}`));
+        this.server.listen(port, () => {
+            // console.log(`Server running on port ${port}`)
+        });
         this.io.on(SocketEvents.CONNECT, (socket) => this.onConnection(socket));
     }
 
@@ -150,7 +152,7 @@ class GameServer {
      * @param {ChessPlayer} player 
      */
     handleDisconnect(player) {
-        console.log("Player disconnected:", player.socket.id);
+        // console.log("Player disconnected:", player.socket.id);
         this.coordinator.removePlayer(player);
     }
 }

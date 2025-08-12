@@ -129,7 +129,6 @@ describe('Advanced Chess Logic Fuzzing', () => {
             try {
                 for (let i = 0; i < moves.length; i++) {
                     const turn = i % 2 === 0 ? white : black;
-                    console.log(moves[i])
                     await makeMove(turn.socket, moves[i]);
                     await new Promise(res => setTimeout(res, 100));
                 }

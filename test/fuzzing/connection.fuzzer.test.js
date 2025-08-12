@@ -181,7 +181,6 @@ describe('Connection Fuzzer', () => {
                     await new Promise(res => setTimeout(res, 100));
                 }
             } catch (error) {
-                console.log(error)
                 // If any error bubbles up here, it means the server failed to handle a state.
                 fail('Chaos Monkey test encountered an unexpected error: ' + error.message);
             } finally {
