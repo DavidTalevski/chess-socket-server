@@ -1,5 +1,5 @@
 {
-  "name": "game-server",
+  "name": "chess-socket-server",
   "version": "1.0.0",
   "description": "A multiplayer game server with player management and real-time communication",
   "main": "./src/index.js",
@@ -22,7 +22,10 @@
     "server",
     "multiplayer",
     "websocket",
-    "real-time"
+    "real-time",
+    "jest",
+    "fuzzing",
+    "testing"
   ],
   "author": "David Talevski",
   "license": "ISC",
@@ -49,10 +52,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/davidtalevski/game-server.git"
+    "url": "https://github.com/DavidTalevski/chess-socket-server.git"
   },
   "bugs": {
-    "url": "https://github.com/davidtalevski/game-server/issues"
+    "url": "https://github.com/DavidTalevski/chess-socket-server/issues"
   },
-  "homepage": "https://github.com/davidtalevski/game-server#readme"
+  "homepage": "https://github.com/DavidTalevski/chess-socket-server#readme"
 }
